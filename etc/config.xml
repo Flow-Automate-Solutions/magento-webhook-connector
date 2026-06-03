@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <magic_webhookconnector>
+            <webhook>
+                <enabled>0</enabled>
+                <webhook_url></webhook_url>
+                <webhook_secret></webhook_secret>
+                <timeout_seconds>5</timeout_seconds>
+                <retry_count>1</retry_count>
+            </webhook>
+        </magic_webhookconnector>
+    </default>
+</config>
