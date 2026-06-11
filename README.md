@@ -62,6 +62,7 @@ Sample payload:
 {
   "event_type": "product.updated",
   "store_id": 1,
+  "store_url": "https://store.example.com",
   "entity_id": 42,
   "sku": "SKU-42",
   "name": "Sample Product",
