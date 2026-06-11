@@ -20,7 +20,7 @@ In your Magento project `composer.json`, add a private repository:
   "repositories": [
     {
       "type": "vcs",
-      "url": "git@bitbucket.org:your-org/magento-webhook-connector.git"
+      "url": "https://github.com/Flow-Automate-Solutions/magento-webhook-connector.git"
     }
   ]
 }
@@ -46,8 +46,7 @@ Go to:
 
 - `Stores` -> `Configuration` -> `General` -> `Magic Webhook Connector`
 
-This page shows runtime status details and provides an encrypted `Webhook Secret` field.
-Only the secret is editable in Admin; enable/url/timeout/retry are fixed in code constants.
+This page shows runtime status details and provides an encrypted `Webhook Secret` field. Copy the secret from Magic CMS admin UI.
 
 ## Webhook Payload
 
