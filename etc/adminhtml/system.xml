@@ -5,7 +5,7 @@
         <section id="magic_webhookconnector" translate="label" sortOrder="910" showInDefault="1" showInWebsite="1" showInStore="0">
             <label>Magic Webhook Connector</label>
             <tab>general</tab>
-            <resource>Magic_WebhookConnector::config</resource>
+            <resource>Magento_Config::config</resource>
             <group id="webhook" translate="label" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0">
                 <label>Webhook Status</label>
                 <field id="env_status" translate="label" type="note" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0">
