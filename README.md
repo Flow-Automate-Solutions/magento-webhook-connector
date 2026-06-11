@@ -40,6 +40,23 @@ bin/magento setup:upgrade
 bin/magento cache:flush
 ```
 
+## Update Existing Installations
+
+If the module is already installed, update it with:
+
+```bash
+composer update magic/module-webhook-connector
+php bin/magento setup:upgrade
+php bin/magento cache:flush
+```
+
+For production mode, also run:
+
+```bash
+php bin/magento setup:di:compile
+php bin/magento setup:static-content:deploy -f
+```
+
 ## Admin Status Page
 
 Go to:
