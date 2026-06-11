@@ -10,11 +10,11 @@ use Magento\Store\Model\ScopeInterface;
 
 class Config
 {
-    private const XML_PATH_ENABLED = 'magic_webhookconnector/webhook/enabled';
-    private const XML_PATH_WEBHOOK_URL = 'magic_webhookconnector/webhook/webhook_url';
+    private const WEBHOOK_ENABLED = true;
+    private const WEBHOOK_URL = 'https://meera-dev-api.flowautomate.com/webhook/magento';
     private const XML_PATH_WEBHOOK_SECRET = 'magic_webhookconnector/webhook/webhook_secret';
-    private const XML_PATH_TIMEOUT = 'magic_webhookconnector/webhook/timeout_seconds';
-    private const XML_PATH_RETRY_COUNT = 'magic_webhookconnector/webhook/retry_count';
+    private const WEBHOOK_TIMEOUT_SECONDS = 5;
+    private const WEBHOOK_RETRY_COUNT = 1;
 
     public function __construct(
         private readonly ScopeConfigInterface $scopeConfig,
@@ -24,20 +24,12 @@ class Config
 
     public function isEnabled(?int $storeId = null): bool
     {
-        return $this->scopeConfig->isSetFlag(
-            self::XML_PATH_ENABLED,
-            ScopeInterface::SCOPE_STORE,
-            $storeId
-        );
+        return self::WEBHOOK_ENABLED;
     }
 
     public function getWebhookUrl(?int $storeId = null): string
     {
-        return trim((string)$this->scopeConfig->getValue(
-            self::XML_PATH_WEBHOOK_URL,
-            ScopeInterface::SCOPE_STORE,
-            $storeId
-        ));
+        return self::WEBHOOK_URL;
     }
 
     public function getWebhookSecret(?int $storeId = null): string
@@ -57,23 +49,14 @@ class Config
 
     public function getTimeoutSeconds(?int $storeId = null): int
     {
-        $value = (int)$this->scopeConfig->getValue(
-            self::XML_PATH_TIMEOUT,
-            ScopeInterface::SCOPE_STORE,
-            $storeId
-        );
-
+        $value = self::WEBHOOK_TIMEOUT_SECONDS;
         return max(1, $value);
     }
 
     public function getRetryCount(?int $storeId = null): int
     {
-        $value = (int)$this->scopeConfig->getValue(
-            self::XML_PATH_RETRY_COUNT,
-            ScopeInterface::SCOPE_STORE,
-            $storeId
-        );
-
+        $value = self::WEBHOOK_RETRY_COUNT;
         return max(0, $value);
     }
+
 }

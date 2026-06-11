@@ -7,30 +7,15 @@
             <tab>general</tab>
             <resource>Magic_WebhookConnector::config</resource>
             <group id="webhook" translate="label" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0">
-                <label>Webhook Settings</label>
-                <field id="enabled" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0">
-                    <label>Enable Webhook Publishing</label>
-                    <comment>Turn on webhook delivery for product events.</comment>
-                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                <label>Webhook Status</label>
+                <field id="env_status" translate="label" type="note" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Environment-driven configuration</label>
+                    <frontend_model>Magic\WebhookConnector\Block\Adminhtml\System\Config\WebhookStatus</frontend_model>
                 </field>
-                <field id="webhook_url" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="0">
-                    <label>Webhook URL</label>
-                    <comment>Endpoint in your connector to receive product events.</comment>
-                </field>
-                <field id="webhook_secret" translate="label comment" type="obscure" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="0">
+                <field id="webhook_secret" translate="label comment" type="obscure" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Webhook Secret</label>
-                    <comment>Used to generate X-Magic-Signature (HMAC SHA256).</comment>
+                    <comment>Set the shared secret used to compute X-Magic-Signature (HMAC SHA256).</comment>
                     <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
-                </field>
-                <field id="timeout_seconds" translate="label comment" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="0">
-                    <label>Timeout (seconds)</label>
-                    <comment>HTTP timeout per attempt.</comment>
-                    <validate>validate-number validate-greater-than-zero</validate>
-                </field>
-                <field id="retry_count" translate="label comment" type="text" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="0">
-                    <label>Retry Count</label>
-                    <comment>Additional retries after the first failed attempt.</comment>
-                    <validate>validate-digits</validate>
                 </field>
             </group>
         </section>

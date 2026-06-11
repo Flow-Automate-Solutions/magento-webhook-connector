@@ -9,7 +9,7 @@
   - `product.updated`
   - `product.deleted`
 - Signed webhook delivery with `X-Magic-Signature` (HMAC SHA256).
-- Configurable webhook URL, secret, timeout, and retries from Magento Admin.
+- Webhook secret configured from Magento Admin (encrypted).
 
 ## Install via Private Composer (non-published module)
 
@@ -40,19 +40,14 @@ bin/magento setup:upgrade
 bin/magento cache:flush
 ```
 
-## Admin Configuration
+## Admin Status Page
 
 Go to:
 
 - `Stores` -> `Configuration` -> `General` -> `Magic Webhook Connector`
 
-Set:
-
-- Enable Webhook Publishing
-- Webhook URL
-- Webhook Secret
-- Timeout (seconds)
-- Retry Count
+This page shows runtime status details and provides an encrypted `Webhook Secret` field.
+Only the secret is editable in Admin; enable/url/timeout/retry are fixed in code constants.
 
 ## Webhook Payload
 
