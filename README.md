@@ -10,6 +10,7 @@
   - `product.deleted`
 - Signed webhook delivery with `X-Magic-Signature` (HMAC SHA256).
 - Webhook secret configured from Magento Admin (encrypted).
+- Anonymous REST ping so Magic CMS can detect whether the module is installed.
 
 ## Install via Private Composer (non-published module)
 
@@ -64,6 +65,26 @@ Go to:
 - `Stores` -> `Configuration` -> `General` -> `Magic Webhook Connector`
 
 This page shows runtime status details and provides an encrypted `Webhook Secret` field. Copy the secret from Magic CMS admin UI.
+
+## REST Status Ping
+
+When the module is installed and enabled, Magento answers:
+
+```bash
+GET {store_base_url}/rest/V1/magic-webhook-connector/status
+```
+
+Example response:
+
+```json
+{
+  "module": "Magic_WebhookConnector",
+  "version": "1.1.0",
+  "webhook_secret_configured": true
+}
+```
+
+If the module is missing or disabled, Magento returns 404 (`Request does not match any route.`). Existing installs need a module update (commands above) before this route exists.
 
 ## Webhook Payload
 
