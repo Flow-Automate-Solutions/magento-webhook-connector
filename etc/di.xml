@@ -13,4 +13,8 @@
                 type="Magic\WebhookConnector\Model\ReviewWriteManagement"/>
     <preference for="Magic\WebhookConnector\Api\Data\ReviewInputInterface"
                 type="Magic\WebhookConnector\Model\Data\ReviewInput"/>
+    <type name="Magento\InventoryApi\Api\SourceRepositoryInterface">
+        <plugin name="magic_webhookconnector_source_repository_webhook"
+                type="Magic\WebhookConnector\Plugin\SourceRepositoryWebhookPlugin"/>
+    </type>
 </config>

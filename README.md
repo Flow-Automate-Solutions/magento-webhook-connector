@@ -1,6 +1,6 @@
 # Magic WebhookConnector (Magento 2 Module)
 
-`Magic_WebhookConnector` publishes product and review webhooks to your connector.
+`Magic_WebhookConnector` publishes product, review, and MSI source webhooks to your connector.
 
 ## Features
 
@@ -12,6 +12,9 @@
   - `review.created`
   - `review.updated`
   - `review.deleted`
+- Inventory source lifecycle webhooks for:
+  - `location.updated`
+  - `location.deleted`
 - Signed webhook delivery with `X-Magic-Signature` (HMAC SHA256).
 - Webhook secret configured from Magento Admin (encrypted).
 - Anonymous REST ping so Magic CMS can detect whether the module is installed.
@@ -85,7 +88,7 @@ Example response:
 ```json
 {
   "module": "Magic_WebhookConnector",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "webhook_secret_configured": true
 }
 ```
@@ -112,6 +115,14 @@ DELETE {store_base_url}/rest/V1/magic-webhook-connector/reviews/{reviewId}
 ```
 
 Create and update requests wrap the input as `{"review": {...}}`. Reviews are created as guests. Rating writes apply the selected 1–5 star option to every active product-rating dimension for the target store. CMS-origin writes suppress this module's review webhooks to prevent sync loops.
+
+## Inventory Source Access
+
+Magento locations use Multi-Source Inventory (MSI) sources. The connector integration
+must be granted read access to inventory sources and reauthorized after upgrading.
+Magic CMS reads `/rest/V1/inventory/sources` and
+`/rest/V1/inventory/sources/{sourceCode}`. Source saves publish `location.updated`;
+explicit source deletes publish `location.deleted`.
 
 ## Webhook Payload
 
