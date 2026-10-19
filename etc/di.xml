@@ -17,4 +17,24 @@
         <plugin name="magic_webhookconnector_source_repository_webhook"
                 type="Magic\WebhookConnector\Plugin\SourceRepositoryWebhookPlugin"/>
     </type>
+    <virtualType name="Magic\WebhookConnector\Plugin\SourceItemsSaveWebhookPlugin"
+                 type="Magic\WebhookConnector\Plugin\SourceItemsWebhookPlugin">
+        <arguments>
+            <argument name="eventType" xsi:type="string">stock.updated</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magic\WebhookConnector\Plugin\SourceItemsDeleteWebhookPlugin"
+                 type="Magic\WebhookConnector\Plugin\SourceItemsWebhookPlugin">
+        <arguments>
+            <argument name="eventType" xsi:type="string">stock.deleted</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\InventoryApi\Api\SourceItemsSaveInterface">
+        <plugin name="magic_webhookconnector_source_items_save_webhook"
+                type="Magic\WebhookConnector\Plugin\SourceItemsSaveWebhookPlugin"/>
+    </type>
+    <type name="Magento\InventoryApi\Api\SourceItemsDeleteInterface">
+        <plugin name="magic_webhookconnector_source_items_delete_webhook"
+                type="Magic\WebhookConnector\Plugin\SourceItemsDeleteWebhookPlugin"/>
+    </type>
 </config>

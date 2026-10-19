@@ -88,7 +88,7 @@ Example response:
 ```json
 {
   "module": "Magic_WebhookConnector",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "webhook_secret_configured": true
 }
 ```
@@ -123,6 +123,11 @@ must be granted read access to inventory sources and reauthorized after upgradin
 Magic CMS reads `/rest/V1/inventory/sources` and
 `/rest/V1/inventory/sources/{sourceCode}`. Source saves publish `location.updated`;
 explicit source deletes publish `location.deleted`.
+
+Source-item saves publish one `stock.updated` event per item, and source-item
+deletes publish `stock.deleted`. Each event contains `source_code` and `sku`.
+The integration also needs native Inventory source-item read access. Grant that
+resource and reauthorize after upgrading to 1.5.0.
 
 ## Webhook Payload
 
