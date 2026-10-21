@@ -25,4 +25,12 @@
         <observer name="magic_webhookconnector_customer_delete_after"
                   instance="Magic\WebhookConnector\Observer\CustomerDeleteAfter"/>
     </event>
+    <event name="sales_order_save_after">
+        <observer name="magic_webhookconnector_order_save_after"
+                  instance="Magic\WebhookConnector\Observer\OrderSaveAfter"/>
+    </event>
+    <event name="sales_order_delete_after">
+        <observer name="magic_webhookconnector_order_delete_after"
+                  instance="Magic\WebhookConnector\Observer\OrderDeleteAfter"/>
+    </event>
 </config>
