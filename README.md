@@ -1,6 +1,6 @@
 # Magic WebhookConnector (Magento 2 Module)
 
-`Magic_WebhookConnector` publishes product, review, and MSI source webhooks to your connector.
+`Magic_WebhookConnector` publishes product, product-option, review, customer, and MSI source webhooks to your connector.
 
 ## Features
 
@@ -15,6 +15,14 @@
 - Inventory source lifecycle webhooks for:
   - `location.updated`
   - `location.deleted`
+- Custom product-option lifecycle webhooks for:
+  - `product_option.created`
+  - `product_option.updated`
+  - `product_option.deleted`
+- Customer lifecycle webhooks for:
+  - `customer.created`
+  - `customer.updated`
+  - `customer.deleted`
 - Signed webhook delivery with `X-Magic-Signature` (HMAC SHA256).
 - Webhook secret configured from Magento Admin (encrypted).
 - Anonymous REST ping so Magic CMS can detect whether the module is installed.
@@ -128,6 +136,15 @@ Source-item saves publish one `stock.updated` event per item, and source-item
 deletes publish `stock.deleted`. Each event contains `source_code` and `sku`.
 The integration also needs native Inventory source-item read access. Grant that
 resource and reauthorize after upgrading to 1.5.0.
+
+## Product options and customers
+
+Custom-option saves and deletes publish `product_option.created`,
+`product_option.updated`, or `product_option.deleted` with `option_id` and `sku`.
+Saving a product can publish one event per option on that product. Customer
+saves and deletes publish `customer.created`, `customer.updated`, or
+`customer.deleted` with `customer_id`. Upgrade to 1.6.0 before these events
+are sent.
 
 ## Webhook Payload
 

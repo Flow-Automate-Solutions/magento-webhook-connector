@@ -17,4 +17,20 @@
         <observer name="magic_webhookconnector_review_delete_after"
                   instance="Magic\WebhookConnector\Observer\ReviewDeleteAfter"/>
     </event>
+    <event name="catalog_product_option_save_after">
+        <observer name="magic_webhookconnector_product_option_save_after"
+                  instance="Magic\WebhookConnector\Observer\ProductOptionSaveAfter"/>
+    </event>
+    <event name="catalog_product_option_delete_after">
+        <observer name="magic_webhookconnector_product_option_delete_after"
+                  instance="Magic\WebhookConnector\Observer\ProductOptionDeleteAfter"/>
+    </event>
+    <event name="customer_save_after">
+        <observer name="magic_webhookconnector_customer_save_after"
+                  instance="Magic\WebhookConnector\Observer\CustomerSaveAfter"/>
+    </event>
+    <event name="customer_delete_after">
+        <observer name="magic_webhookconnector_customer_delete_after"
+                  instance="Magic\WebhookConnector\Observer\CustomerDeleteAfter"/>
+    </event>
 </config>
