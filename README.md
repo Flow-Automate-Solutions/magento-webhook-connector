@@ -1,6 +1,6 @@
 # Magic WebhookConnector (Magento 2 Module)
 
-`Magic_WebhookConnector` publishes product, product-option, review, customer, order, cart-price-rule, and MSI source webhooks to your connector.
+`Magic_WebhookConnector` publishes product, product-option, review, customer, order, abandoned-cart, cart-price-rule, and MSI source webhooks to your connector.
 
 ## Features
 
@@ -27,6 +27,10 @@
   - `order.created`
   - `order.updated`
   - `order.deleted`
+- Abandoned cart lifecycle webhooks for:
+  - `abandoned_cart.created`
+  - `abandoned_cart.updated`
+  - `abandoned_cart.deleted`
 - Signed webhook delivery with `X-Magic-Signature` (HMAC SHA256).
 - Webhook secret configured from Magento Admin (encrypted).
 - Anonymous REST ping so Magic CMS can detect whether the module is installed.
@@ -157,6 +161,10 @@ Cart price rule and coupon saves publish `discount.created` or
 publishes the current shape and deletes the other: one message per coupon, or
 one automatic message. A rule delete publishes a delete for every coupon and
 for the automatic id. Upgrade to 1.6.3 before discount events are sent.
+Quote saves publish `abandoned_cart.created` or `abandoned_cart.updated`, and
+quote deletes publish `abandoned_cart.deleted`, each with `quote_id`. A quote
+that is only deactivated is an update. Upgrade to 1.6.4 before abandoned-cart
+events are sent.
 
 ## Webhook Payload
 
