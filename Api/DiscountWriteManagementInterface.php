@@ -5,22 +5,22 @@ declare(strict_types=1);
 namespace Magic\WebhookConnector\Api;
 
 use Magic\WebhookConnector\Api\Data\DiscountWriteResultInterface;
-use Magento\SalesRule\Api\Data\RuleInterface;
+use Magic\WebhookConnector\Model\Data\DiscountRule;
 
 interface DiscountWriteManagementInterface
 {
     /**
-     * @param \Magento\SalesRule\Api\Data\RuleInterface $rule
+     * @param \Magic\WebhookConnector\Model\Data\DiscountRule $rule
      * @return \Magic\WebhookConnector\Api\Data\DiscountWriteResultInterface
      */
-    public function create(RuleInterface $rule): DiscountWriteResultInterface;
+    public function create(DiscountRule $rule): DiscountWriteResultInterface;
 
     /**
      * @param int $ruleId
-     * @param \Magento\SalesRule\Api\Data\RuleInterface $rule
+     * @param \Magic\WebhookConnector\Model\Data\DiscountRule $rule
      * @return \Magic\WebhookConnector\Api\Data\DiscountWriteResultInterface
      */
-    public function update(int $ruleId, RuleInterface $rule): DiscountWriteResultInterface;
+    public function update(int $ruleId, DiscountRule $rule): DiscountWriteResultInterface;
 
     /**
      * @param int $ruleId

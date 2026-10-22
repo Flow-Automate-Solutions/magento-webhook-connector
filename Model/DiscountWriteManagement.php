@@ -6,13 +6,13 @@ namespace Magic\WebhookConnector\Model;
 
 use Magic\WebhookConnector\Api\Data\DiscountWriteResultInterface;
 use Magic\WebhookConnector\Api\DiscountWriteManagementInterface;
+use Magic\WebhookConnector\Model\Data\DiscountRule;
 use Magic\WebhookConnector\Model\Data\DiscountWriteResult;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Exception\InputException;
 use Magento\SalesRule\Api\CouponRepositoryInterface;
 use Magento\SalesRule\Api\Data\CouponInterface;
 use Magento\SalesRule\Api\Data\CouponInterfaceFactory;
-use Magento\SalesRule\Api\Data\RuleInterface;
 use Magento\SalesRule\Api\RuleRepositoryInterface;
 use Magento\SalesRule\Model\Rule;
 
@@ -27,17 +27,30 @@ class DiscountWriteManagement implements DiscountWriteManagementInterface
     ) {
     }
 
-    public function create(RuleInterface $rule): DiscountWriteResultInterface
+    /**
+     * @param \Magic\WebhookConnector\Model\Data\DiscountRule $rule
+     * @return \Magic\WebhookConnector\Api\Data\DiscountWriteResultInterface
+     */
+    public function create(DiscountRule $rule): DiscountWriteResultInterface
     {
         return $this->save($rule, null);
     }
 
-    public function update(int $ruleId, RuleInterface $rule): DiscountWriteResultInterface
+    /**
+     * @param int $ruleId
+     * @param \Magic\WebhookConnector\Model\Data\DiscountRule $rule
+     * @return \Magic\WebhookConnector\Api\Data\DiscountWriteResultInterface
+     */
+    public function update(int $ruleId, DiscountRule $rule): DiscountWriteResultInterface
     {
         $this->ruleRepository->getById($ruleId);
         return $this->save($rule, $ruleId);
     }
 
+    /**
+     * @param int $ruleId
+     * @return bool
+     */
     public function delete(int $ruleId): bool
     {
         return (bool)$this->webhookSuppressor->run(
@@ -45,6 +58,10 @@ class DiscountWriteManagement implements DiscountWriteManagementInterface
         );
     }
 
+    /**
+     * @param int $couponId
+     * @return bool
+     */
     public function deleteCoupon(int $couponId): bool
     {
         return (bool)$this->webhookSuppressor->run(
@@ -52,7 +69,7 @@ class DiscountWriteManagement implements DiscountWriteManagementInterface
         );
     }
 
-    private function save(RuleInterface $rule, ?int $ruleId): DiscountWriteResultInterface
+    private function save(DiscountRule $rule, ?int $ruleId): DiscountWriteResultInterface
     {
         $couponType = $this->couponType($rule);
         if (!in_array($couponType, [Rule::COUPON_TYPE_NO_COUPON, Rule::COUPON_TYPE_SPECIFIC], true)) {
@@ -81,7 +98,7 @@ class DiscountWriteManagement implements DiscountWriteManagementInterface
         });
     }
 
-    private function syncPrimaryCoupon(int $ruleId, string $code, RuleInterface $rule): int
+    private function syncPrimaryCoupon(int $ruleId, string $code, DiscountRule $rule): int
     {
         $coupon = $this->primaryCoupon($ruleId) ?? $this->couponFactory->create();
         if (!(int)$coupon->getCouponId()) {
@@ -113,7 +130,7 @@ class DiscountWriteManagement implements DiscountWriteManagementInterface
         return $fallback;
     }
 
-    private function couponType(RuleInterface $rule): int
+    private function couponType(DiscountRule $rule): int
     {
         $value = $rule->getCouponType();
         $text = strtolower(trim((string)$value));

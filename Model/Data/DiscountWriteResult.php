@@ -9,16 +9,26 @@ use Magento\Framework\DataObject;
 
 class DiscountWriteResult extends DataObject implements DiscountWriteResultInterface
 {
+    /**
+     * @return int
+     */
     public function getRuleId(): int
     {
         return (int)$this->getData('rule_id');
     }
 
+    /**
+     * @param int $ruleId
+     * @return $this
+     */
     public function setRuleId(int $ruleId): DiscountWriteResultInterface
     {
         return $this->setData('rule_id', $ruleId);
     }
 
+    /**
+     * @return int|null
+     */
     public function getCouponId(): ?int
     {
         $couponId = $this->getData('coupon_id');
@@ -28,6 +38,10 @@ class DiscountWriteResult extends DataObject implements DiscountWriteResultInter
         return (int)$couponId;
     }
 
+    /**
+     * @param int|null $couponId
+     * @return $this
+     */
     public function setCouponId(?int $couponId): DiscountWriteResultInterface
     {
         return $this->setData('coupon_id', $couponId);
