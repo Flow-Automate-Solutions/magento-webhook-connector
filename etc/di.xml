@@ -13,6 +13,10 @@
                 type="Magic\WebhookConnector\Model\ReviewWriteManagement"/>
     <preference for="Magic\WebhookConnector\Api\Data\ReviewInputInterface"
                 type="Magic\WebhookConnector\Model\Data\ReviewInput"/>
+    <preference for="Magic\WebhookConnector\Api\DiscountWriteManagementInterface"
+                type="Magic\WebhookConnector\Model\DiscountWriteManagement"/>
+    <preference for="Magic\WebhookConnector\Api\Data\DiscountWriteResultInterface"
+                type="Magic\WebhookConnector\Model\Data\DiscountWriteResult"/>
     <type name="Magento\Catalog\Model\Product\Option">
         <plugin name="magic_webhookconnector_product_option_webhook"
                 type="Magic\WebhookConnector\Plugin\ProductOptionWebhookPlugin"/>

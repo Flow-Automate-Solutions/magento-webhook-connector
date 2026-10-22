@@ -37,4 +37,28 @@
             <resource ref="Magic_WebhookConnector::reviews_write"/>
         </resources>
     </route>
+    <route url="/V1/magic-webhook-connector/discounts" method="POST">
+        <service class="Magic\WebhookConnector\Model\DiscountWriteManagement" method="create"/>
+        <resources>
+            <resource ref="Magento_SalesRule::quote"/>
+        </resources>
+    </route>
+    <route url="/V1/magic-webhook-connector/discounts/:ruleId" method="PUT">
+        <service class="Magic\WebhookConnector\Model\DiscountWriteManagement" method="update"/>
+        <resources>
+            <resource ref="Magento_SalesRule::quote"/>
+        </resources>
+    </route>
+    <route url="/V1/magic-webhook-connector/discounts/:ruleId" method="DELETE">
+        <service class="Magic\WebhookConnector\Model\DiscountWriteManagement" method="delete"/>
+        <resources>
+            <resource ref="Magento_SalesRule::quote"/>
+        </resources>
+    </route>
+    <route url="/V1/magic-webhook-connector/discounts/coupons/:couponId" method="DELETE">
+        <service class="Magic\WebhookConnector\Model\DiscountWriteManagement" method="deleteCoupon"/>
+        <resources>
+            <resource ref="Magento_SalesRule::quote"/>
+        </resources>
+    </route>
 </routes>

@@ -164,7 +164,8 @@ for the automatic id. Upgrade to 1.6.3 before discount events are sent.
 Quote saves publish `abandoned_cart.created` or `abandoned_cart.updated`, and
 quote deletes publish `abandoned_cart.deleted`, each with `quote_id`. A quote
 that is only deactivated is an update. Upgrade to 1.6.4 before abandoned-cart
-events are sent.
+events are sent. CMS discount writes use the discount save and delete routes
+and do not emit these events. Upgrade to 1.6.5 before posting discounts.
 
 ## Webhook Payload
 

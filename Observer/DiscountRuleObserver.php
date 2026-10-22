@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Magic\WebhookConnector\Observer;
 
 use Magic\WebhookConnector\Model\DiscountWebhookPublisher;
+use Magic\WebhookConnector\Model\DiscountWebhookSuppressor;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\SalesRule\Model\ResourceModel\Coupon\CollectionFactory;
@@ -12,14 +14,22 @@ use Magento\SalesRule\Model\Rule;
 
 class DiscountRuleObserver implements ObserverInterface
 {
+    private DiscountWebhookSuppressor $webhookSuppressor;
+
     public function __construct(
         private readonly DiscountWebhookPublisher $publisher,
-        private readonly CollectionFactory $couponCollectionFactory
+        private readonly CollectionFactory $couponCollectionFactory,
+        ?DiscountWebhookSuppressor $webhookSuppressor = null
     ) {
+        $this->webhookSuppressor = $webhookSuppressor
+            ?? ObjectManager::getInstance()->get(DiscountWebhookSuppressor::class);
     }
 
     public function execute(Observer $observer): void
     {
+        if ($this->webhookSuppressor->isSuppressed()) {
+            return;
+        }
         $rule = $observer->getEvent()->getRule();
         if (!$rule || !(int)$rule->getId()) {
             return;
