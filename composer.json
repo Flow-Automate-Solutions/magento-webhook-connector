@@ -2,7 +2,7 @@
     "name": "magic/module-webhook-connector",
     "description": "Magento 2 webhook connector for Magic CMS",
     "type": "magento2-module",
-    "version": "1.6.2",
+    "version": "1.6.4",
     "license": [
         "proprietary"
     ],
