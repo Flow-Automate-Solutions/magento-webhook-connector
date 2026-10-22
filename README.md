@@ -1,6 +1,6 @@
 # Magic WebhookConnector (Magento 2 Module)
 
-`Magic_WebhookConnector` publishes product, product-option, review, customer, order, and MSI source webhooks to your connector.
+`Magic_WebhookConnector` publishes product, product-option, review, customer, order, cart-price-rule, and MSI source webhooks to your connector.
 
 ## Features
 
@@ -151,6 +151,12 @@ saves and deletes publish `customer.created`, `customer.updated`, or
 are sent. Order saves publish `order.created` or `order.updated`, and order
 deletes publish `order.deleted`, each with `order_id`. Cancel, refund, and
 shipment stay order updates. Upgrade to 1.6.2 before order events are sent.
+Cart price rule and coupon saves publish `discount.created` or
+`discount.updated`. Deletes publish `discount.deleted`. Each payload includes
+`rule_id`, `coupon_id`, and `method` (`code` or `automatic`). A rule save
+publishes the current shape and deletes the other: one message per coupon, or
+one automatic message. A rule delete publishes a delete for every coupon and
+for the automatic id. Upgrade to 1.6.3 before discount events are sent.
 
 ## Webhook Payload
 
