@@ -1,0 +1,12 @@
+{
+    "quote": {
+        "column": {
+            "meera_source": true
+        }
+    },
+    "sales_order": {
+        "column": {
+            "meera_source": true
+        }
+    }
+}

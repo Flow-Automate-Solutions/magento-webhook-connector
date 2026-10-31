@@ -60,6 +60,7 @@ class Apply extends Action implements HttpGetActionInterface
             if ($added < 1) {
                 return $redirect->setPath('checkout/cart');
             }
+            $this->cart->getQuote()->setData('meera_source', 'meera');
             $this->cart->save();
         } catch (LocalizedException $exception) {
             return $redirect->setPath('checkout/cart');

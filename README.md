@@ -171,7 +171,9 @@ Checkout handoff uses `POST /V1/magic-webhook-connector/cart-sync`. The route st
 the SKUs for 15 minutes and returns `{store}/meera/cart/apply?meera_cart={id}`.
 Opening that URL replaces the session quote and redirects to checkout. Upgrade to
 1.6.6 before Meera checkout calls this route. The integration token needs
-`Magento_Sales::create`.
+`Magento_Sales::create`. A successful apply stores `meera_source` on the quote.
+Placing that quote copies `meera_source` onto the order, and the order API
+returns it as an extension attribute. Upgrade to 1.6.7 before reading the flag.
 
 ## Webhook Payload
 
