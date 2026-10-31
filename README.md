@@ -36,6 +36,7 @@
 - Anonymous REST ping so Magic CMS can detect whether the module is installed.
 - Authenticated, paginated product-review read APIs.
 - Authenticated product-review create, update, and delete APIs.
+- Authenticated cart-sync that hands a shopper's cart to Magento checkout.
 
 ## Install via Private Composer (non-published module)
 
@@ -166,6 +167,11 @@ quote deletes publish `abandoned_cart.deleted`, each with `quote_id`. A quote
 that is only deactivated is an update. Upgrade to 1.6.4 before abandoned-cart
 events are sent. CMS discount writes use the discount save and delete routes
 and do not emit these events. Upgrade to 1.6.5 before posting discounts.
+Checkout handoff uses `POST /V1/magic-webhook-connector/cart-sync`. The route stores
+the SKUs for 15 minutes and returns `{store}/meera/cart/apply?meera_cart={id}`.
+Opening that URL replaces the session quote and redirects to checkout. Upgrade to
+1.6.6 before Meera checkout calls this route. The integration token needs
+`Magento_Sales::create`.
 
 ## Webhook Payload
 

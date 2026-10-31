@@ -61,4 +61,10 @@
             <resource ref="Magento_SalesRule::quote"/>
         </resources>
     </route>
+    <route url="/V1/magic-webhook-connector/cart-sync" method="POST">
+        <service class="Magic\WebhookConnector\Api\CartSyncManagementInterface" method="sync"/>
+        <resources>
+            <resource ref="Magento_Sales::create"/>
+        </resources>
+    </route>
 </routes>

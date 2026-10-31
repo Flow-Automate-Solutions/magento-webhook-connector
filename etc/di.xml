@@ -17,6 +17,12 @@
                 type="Magic\WebhookConnector\Model\DiscountWriteManagement"/>
     <preference for="Magic\WebhookConnector\Api\Data\DiscountWriteResultInterface"
                 type="Magic\WebhookConnector\Model\Data\DiscountWriteResult"/>
+    <preference for="Magic\WebhookConnector\Api\CartSyncManagementInterface"
+                type="Magic\WebhookConnector\Model\CartSyncManagement"/>
+    <preference for="Magic\WebhookConnector\Api\Data\CartSyncItemInterface"
+                type="Magic\WebhookConnector\Model\Data\CartSyncItem"/>
+    <preference for="Magic\WebhookConnector\Api\Data\CartSyncResultInterface"
+                type="Magic\WebhookConnector\Model\Data\CartSyncResult"/>
     <type name="Magento\Catalog\Model\Product\Option">
         <plugin name="magic_webhookconnector_product_option_webhook"
                 type="Magic\WebhookConnector\Plugin\ProductOptionWebhookPlugin"/>
