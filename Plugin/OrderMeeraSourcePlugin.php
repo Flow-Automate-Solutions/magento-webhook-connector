@@ -17,6 +17,15 @@ class OrderMeeraSourcePlugin
     ) {
     }
 
+    /**
+     * @return array{0: OrderInterface}
+     */
+    public function beforeSave(OrderRepositoryInterface $subject, OrderInterface $order): array
+    {
+        $this->persistColumn($order);
+        return [$order];
+    }
+
     public function afterGet(OrderRepositoryInterface $subject, OrderInterface $order): OrderInterface
     {
         $this->apply($order);
@@ -31,6 +40,21 @@ class OrderMeeraSourcePlugin
             $this->apply($order);
         }
         return $result;
+    }
+
+    private function persistColumn(OrderInterface $order): void
+    {
+        if (!$order instanceof DataObject) {
+            return;
+        }
+        $extension = $order->getExtensionAttributes();
+        if (!$extension || !method_exists($extension, 'getMeeraSource')) {
+            return;
+        }
+        if (trim((string)$extension->getMeeraSource()) !== 'meera') {
+            return;
+        }
+        $order->setData('meera_source', 'meera');
     }
 
     private function apply(OrderInterface $order): void
