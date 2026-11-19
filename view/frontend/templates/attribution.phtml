@@ -1,0 +1,101 @@
+<?php
+/** @var \Magic\WebhookConnector\Block\Attribution $block */
+$endpoint = $block->getEndpoint();
+$formKey = $block->getFormKeyValue();
+?>
+<script>
+(function () {
+    var STORAGE_KEY = 'flowmate:meera-attribution-touch:v1';
+    var TOUCH_TTL_MS = 7 * 24 * 60 * 60 * 1000;
+    var ATTRIBUTION_MODEL = 'last_meera_touch_7d_v1';
+    var endpoint = <?= json_encode($endpoint, JSON_UNESCAPED_SLASHES) ?>;
+    var formKey = <?= json_encode($formKey) ?>;
+    var allowedOrigins = [
+        'https://search.flowautomate.com',
+        'https://search-pro.flowautomate.com',
+        'https://meera-lite-dev.flowautomate.com',
+        'https://meera-sdk.flowautomate.com',
+        'https://dev-meera-console.flowautomate.com',
+        'https://meera-console.flowautomate.com'
+    ];
+
+    function storedTouch() {
+        try {
+            var touch = JSON.parse(window.localStorage.getItem(STORAGE_KEY) || 'null');
+            if (!touch || Date.now() >= Number(touch.expires_at || 0)) {
+                try { window.localStorage.removeItem(STORAGE_KEY); } catch (error) {}
+                return null;
+            }
+            return touch;
+        } catch (error) {
+            return null;
+        }
+    }
+
+    function trustedMeeraFrame(event) {
+        if (allowedOrigins.indexOf(event.origin) === -1) {
+            return false;
+        }
+        return Array.prototype.some.call(document.querySelectorAll('iframe'), function (frame) {
+            if (frame.contentWindow !== event.source) {
+                return false;
+            }
+            try {
+                return new URL(frame.src, window.location.href).origin === event.origin;
+            } catch (error) {
+                return false;
+            }
+        });
+    }
+
+    function syncTouch(touch) {
+        if (!touch || !endpoint || typeof window.fetch !== 'function') {
+            return Promise.resolve();
+        }
+        var body = new URLSearchParams({
+            form_key: formKey,
+            touch_id: touch.touch_id,
+            touch_at: touch.touch_at,
+            model: ATTRIBUTION_MODEL
+        });
+        return window.fetch(endpoint, {
+            method: 'POST',
+            credentials: 'same-origin',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: body.toString()
+        }).then(function (response) {
+            if (!response.ok) {
+                throw new Error('Unable to sync Meera assistance touch');
+            }
+        });
+    }
+
+    window.addEventListener('message', function (event) {
+        if (!trustedMeeraFrame(event) || !event.data || event.data.type !== 'MEERA_ATTRIBUTION_TOUCH') {
+            return;
+        }
+        var touchId = String(event.data.touch_id || '').trim();
+        var touchAt = String(event.data.timestamp || '').trim();
+        var touchTime = Date.parse(touchAt);
+        var current = storedTouch();
+        if (
+            !/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(touchId) ||
+            !Number.isFinite(touchTime) ||
+            touchTime < Date.now() - TOUCH_TTL_MS ||
+            touchTime > Date.now() + 5 * 60 * 1000 ||
+            (current && Date.parse(current.touch_at) > touchTime)
+        ) {
+            return;
+        }
+        var touch = {
+            touch_id: touchId,
+            touch_at: new Date(touchTime).toISOString(),
+            expires_at: touchTime + TOUCH_TTL_MS
+        };
+        try { window.localStorage.setItem(STORAGE_KEY, JSON.stringify(touch)); } catch (error) {}
+        syncTouch(touch).catch(function () {});
+    });
+
+    syncTouch(storedTouch()).catch(function () {});
+})();
+</script>

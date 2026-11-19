@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Magic\WebhookConnector\Controller\Cart;
 
+use Magic\WebhookConnector\Model\AssistedAttribution;
 use Magic\WebhookConnector\Model\CartSyncManagement;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Checkout\Model\Cart;
@@ -45,7 +46,8 @@ class Apply extends Action implements HttpGetActionInterface
         $cacheKey = CartSyncManagement::CACHE_PREFIX . $cartId;
         $raw = $this->cache->load($cacheKey);
         $this->cache->remove($cacheKey);
-        $items = $this->decodeItems($raw);
+        $payload = $this->decodePayload($raw);
+        $items = $payload['items'];
         if ($items === []) {
             return $redirect->setPath('checkout/cart');
         }
@@ -60,7 +62,15 @@ class Apply extends Action implements HttpGetActionInterface
             if ($added < 1) {
                 return $redirect->setPath('checkout/cart');
             }
-            $this->cart->getQuote()->setData('meera_source', 'meera');
+            $quote = $this->cart->getQuote();
+            $quote->setData('meera_source', 'meera');
+            $touch = AssistedAttribution::preferLatest(
+                AssistedAttribution::read($quote),
+                $payload['touch']
+            );
+            if ($touch !== null) {
+                AssistedAttribution::write($quote, $touch);
+            }
             $this->cart->save();
         } catch (LocalizedException $exception) {
             return $redirect->setPath('checkout/cart');
@@ -71,23 +81,42 @@ class Apply extends Action implements HttpGetActionInterface
 
     /**
      * @param mixed $raw
-     * @return array<int, array{sku: string, quantity: int}>
+     * @return array{items: array<int, array{sku: string, quantity: int}>, touch: array{touch_id: string, touch_at: string, model: string}|null}
      */
-    private function decodeItems($raw): array
+    private function decodePayload($raw): array
     {
+        $empty = ['items' => [], 'touch' => null];
         if (!is_string($raw) || $raw === '') {
-            return [];
+            return $empty;
         }
         try {
             $decoded = $this->serializer->unserialize($raw);
         } catch (\InvalidArgumentException $exception) {
-            return [];
+            return $empty;
         }
         if (!is_array($decoded)) {
+            return $empty;
+        }
+        $lines = array_is_list($decoded) ? $decoded : ($decoded['items'] ?? []);
+        $touch = array_is_list($decoded) ? null : ($decoded['attribution_touch'] ?? null);
+
+        return [
+            'items' => $this->decodeItems($lines),
+            'touch' => is_array($touch) ? AssistedAttribution::normalize($touch) : null,
+        ];
+    }
+
+    /**
+     * @param mixed $raw
+     * @return array<int, array{sku: string, quantity: int}>
+     */
+    private function decodeItems($raw): array
+    {
+        if (!is_array($raw)) {
             return [];
         }
         $items = [];
-        foreach ($decoded as $item) {
+        foreach ($raw as $item) {
             if (!is_array($item)) {
                 continue;
             }

@@ -10,7 +10,8 @@ interface CartSyncManagementInterface
 {
     /**
      * @param \Magic\WebhookConnector\Api\Data\CartSyncItemInterface[] $items
+     * @param \Magic\WebhookConnector\Api\Data\AttributionTouchInterface|null $attributionTouch
      * @return \Magic\WebhookConnector\Api\Data\CartSyncResultInterface
      */
-    public function sync(array $items): CartSyncResultInterface;
+    public function sync(array $items, $attributionTouch = null): CartSyncResultInterface;
 }

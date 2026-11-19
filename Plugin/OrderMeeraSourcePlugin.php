@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Magic\WebhookConnector\Plugin;
 
+use Magic\WebhookConnector\Model\AssistedAttribution;
 use Magento\Framework\DataObject;
 use Magento\Sales\Api\Data\OrderExtensionFactory;
 use Magento\Sales\Api\Data\OrderInterface;
@@ -48,13 +49,29 @@ class OrderMeeraSourcePlugin
             return;
         }
         $extension = $order->getExtensionAttributes();
-        if (!$extension || !method_exists($extension, 'getMeeraSource')) {
+        if (!$extension) {
             return;
         }
-        if (trim((string)$extension->getMeeraSource()) !== 'meera') {
-            return;
+        if (
+            method_exists($extension, 'getMeeraSource')
+            && trim((string)$extension->getMeeraSource()) === 'meera'
+        ) {
+            $order->setData('meera_source', 'meera');
         }
-        $order->setData('meera_source', 'meera');
+        $touch = [];
+        if (method_exists($extension, 'getMeeraTouchId')) {
+            $touch['touch_id'] = $extension->getMeeraTouchId();
+        }
+        if (method_exists($extension, 'getMeeraTouchAt')) {
+            $touch['touch_at'] = $extension->getMeeraTouchAt();
+        }
+        if (method_exists($extension, 'getMeeraAttributionModel')) {
+            $touch['model'] = $extension->getMeeraAttributionModel();
+        }
+        $normalized = AssistedAttribution::normalize($touch);
+        if ($normalized !== null) {
+            AssistedAttribution::write($order, $normalized);
+        }
     }
 
     private function apply(OrderInterface $order): void
@@ -62,12 +79,26 @@ class OrderMeeraSourcePlugin
         if (!$order instanceof DataObject) {
             return;
         }
-        $value = trim((string)$order->getData('meera_source'));
-        if ($value !== 'meera') {
+        $source = trim((string)$order->getData('meera_source'));
+        $touchId = trim((string)$order->getData('meera_touch_id'));
+        $touchAt = trim((string)$order->getData('meera_touch_at'));
+        $model = trim((string)$order->getData('meera_attribution_model'));
+        if ($source !== 'meera' && $touchId === '' && $touchAt === '' && $model === '') {
             return;
         }
         $extension = $order->getExtensionAttributes() ?: $this->orderExtensionFactory->create();
-        $extension->setMeeraSource('meera');
+        if ($source === 'meera' && method_exists($extension, 'setMeeraSource')) {
+            $extension->setMeeraSource('meera');
+        }
+        if ($touchId !== '' && method_exists($extension, 'setMeeraTouchId')) {
+            $extension->setMeeraTouchId($touchId);
+        }
+        if ($touchAt !== '' && method_exists($extension, 'setMeeraTouchAt')) {
+            $extension->setMeeraTouchAt($touchAt);
+        }
+        if ($model !== '' && method_exists($extension, 'setMeeraAttributionModel')) {
+            $extension->setMeeraAttributionModel($model);
+        }
         $order->setExtensionAttributes($extension);
     }
 }

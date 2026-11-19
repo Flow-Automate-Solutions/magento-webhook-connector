@@ -6,6 +6,15 @@
             <field name="meera_source">
                 <aspect name="to_order"/>
             </field>
+            <field name="meera_touch_id">
+                <aspect name="to_order"/>
+            </field>
+            <field name="meera_touch_at">
+                <aspect name="to_order"/>
+            </field>
+            <field name="meera_attribution_model">
+                <aspect name="to_order"/>
+            </field>
         </fieldset>
     </scope>
 </config>

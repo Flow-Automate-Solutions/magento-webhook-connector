@@ -5,9 +5,11 @@ declare(strict_types=1);
 namespace Magic\WebhookConnector\Model;
 
 use Magic\WebhookConnector\Api\CartSyncManagementInterface;
+use Magic\WebhookConnector\Api\Data\AttributionTouchInterface;
 use Magic\WebhookConnector\Api\Data\CartSyncItemInterface;
 use Magic\WebhookConnector\Api\Data\CartSyncResultInterface;
 use Magic\WebhookConnector\Api\Data\CartSyncResultInterfaceFactory;
+use Magic\WebhookConnector\Model\AssistedAttribution;
 use Magento\Framework\App\CacheInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Serialize\Serializer\Json;
@@ -29,10 +31,11 @@ class CartSyncManagement implements CartSyncManagementInterface
 
     /**
      * @param \Magic\WebhookConnector\Api\Data\CartSyncItemInterface[] $items
+     * @param \Magic\WebhookConnector\Api\Data\AttributionTouchInterface|null $attributionTouch
      * @return \Magic\WebhookConnector\Api\Data\CartSyncResultInterface
      * @throws WebapiException
      */
-    public function sync(array $items): CartSyncResultInterface
+    public function sync(array $items, $attributionTouch = null): CartSyncResultInterface
     {
         $lines = [];
         foreach ($items as $item) {
@@ -59,8 +62,13 @@ class CartSyncManagement implements CartSyncManagementInterface
         } catch (\Exception $exception) {
             throw new LocalizedException(__('Unable to store the cart.'), $exception);
         }
+        $payload = ['items' => $lines];
+        $touch = $this->touchFromInput($attributionTouch);
+        if ($touch !== null) {
+            $payload['attribution_touch'] = $touch;
+        }
         $this->cache->save(
-            $this->serializer->serialize($lines),
+            $this->serializer->serialize($payload),
             self::CACHE_PREFIX . $cartId,
             ['meera_cart'],
             self::CACHE_TTL
@@ -85,5 +93,25 @@ class CartSyncManagement implements CartSyncManagementInterface
             return [trim((string)($item['sku'] ?? '')), (int)($item['quantity'] ?? 0)];
         }
         return ['', 0];
+    }
+
+    /**
+     * @param mixed $touch
+     * @return array{touch_id: string, touch_at: string, model: string}|null
+     */
+    private function touchFromInput($touch): ?array
+    {
+        if ($touch instanceof AttributionTouchInterface) {
+            return AssistedAttribution::normalize([
+                'touch_id' => $touch->getTouchId(),
+                'touch_at' => $touch->getTouchAt(),
+                'model' => $touch->getModel(),
+            ]);
+        }
+        if (is_array($touch)) {
+            return AssistedAttribution::normalize($touch);
+        }
+
+        return null;
     }
 }

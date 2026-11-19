@@ -4,9 +4,21 @@
     <table name="quote" resource="checkout">
         <column xsi:type="varchar" name="meera_source" nullable="true" length="32"
                 comment="Meera checkout source"/>
+        <column xsi:type="varchar" name="meera_touch_id" nullable="true" length="36"
+                comment="Meera assistance touch ID"/>
+        <column xsi:type="varchar" name="meera_touch_at" nullable="true" length="40"
+                comment="Meera assistance touch time"/>
+        <column xsi:type="varchar" name="meera_attribution_model" nullable="true" length="64"
+                comment="Meera assistance attribution model"/>
     </table>
     <table name="sales_order" resource="sales">
         <column xsi:type="varchar" name="meera_source" nullable="true" length="32"
                 comment="Meera checkout source"/>
+        <column xsi:type="varchar" name="meera_touch_id" nullable="true" length="36"
+                comment="Meera assistance touch ID"/>
+        <column xsi:type="varchar" name="meera_touch_at" nullable="true" length="40"
+                comment="Meera assistance touch time"/>
+        <column xsi:type="varchar" name="meera_attribution_model" nullable="true" length="64"
+                comment="Meera assistance attribution model"/>
     </table>
 </schema>

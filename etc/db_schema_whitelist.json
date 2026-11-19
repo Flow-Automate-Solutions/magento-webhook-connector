@@ -1,12 +1,18 @@
 {
     "quote": {
         "column": {
-            "meera_source": true
+            "meera_source": true,
+            "meera_touch_id": true,
+            "meera_touch_at": true,
+            "meera_attribution_model": true
         }
     },
     "sales_order": {
         "column": {
-            "meera_source": true
+            "meera_source": true,
+            "meera_touch_id": true,
+            "meera_touch_at": true,
+            "meera_attribution_model": true
         }
     }
 }

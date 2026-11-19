@@ -3,5 +3,8 @@
         xsi:noNamespaceSchemaLocation="urn:magento:framework:Api/etc/extension_attributes.xsd">
     <extension_attributes for="Magento\Sales\Api\Data\OrderInterface">
         <attribute code="meera_source" type="string"/>
+        <attribute code="meera_touch_id" type="string"/>
+        <attribute code="meera_touch_at" type="string"/>
+        <attribute code="meera_attribution_model" type="string"/>
     </extension_attributes>
 </config>

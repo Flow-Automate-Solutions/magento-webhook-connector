@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Magic\WebhookConnector\Observer;
 
+use Magic\WebhookConnector\Model\AssistedAttribution;
 use Magento\Framework\DataObject;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
@@ -17,9 +18,9 @@ class MeeraSourceOrder implements ObserverInterface
         if (!$order instanceof DataObject || !$quote instanceof DataObject) {
             return;
         }
-        if (trim((string)$quote->getData('meera_source')) !== 'meera') {
-            return;
+        if (trim((string)$quote->getData('meera_source')) === 'meera') {
+            $order->setData('meera_source', 'meera');
         }
-        $order->setData('meera_source', 'meera');
+        AssistedAttribution::copy($quote, $order);
     }
 }

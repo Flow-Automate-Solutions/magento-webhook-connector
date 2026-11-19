@@ -174,6 +174,12 @@ Opening that URL replaces the session quote and redirects to checkout. Upgrade t
 `Magento_Sales::create`. A successful apply stores `meera_source` on the quote.
 Placing that quote writes `meera_source` on the order row, and the order API
 returns it as an extension attribute. Upgrade to 1.6.9 before reading the flag.
+Assisted attribution stores the latest seven-day Meera touch on the quote and
+copies `meera_touch_id`, `meera_touch_at`, and `meera_attribution_model` to the
+order. The storefront posts that touch to `/meera/attribution/touch`, and Meera
+checkout can include `attributionTouch` in cart-sync. Upgrade to 1.7.0, run
+`bin/magento setup:upgrade`, and flush the cache before assisted attribution
+applies to new orders.
 
 ## Webhook Payload
 
